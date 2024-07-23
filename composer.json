@@ -1,4 +1,11 @@
 {
   "name": "doomy/testing",
-  "description": "testing support code & tools"
+  "description": "testing support code & tools",
+  "autoload": {
+    "classmap": ["src/"]
+  },
+  "require": {
+    "dibi/dibi": "^5.0",
+    "phpunit/phpunit": "^11.2"
+  }
 }

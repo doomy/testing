@@ -11,13 +11,16 @@ abstract class AbstractDbAwareTestCase extends TestCase
 {
     protected Connection $connection;
 
-    public function __construct(string $name)
+    public function __construct(string $name, ?array $config = null)
     {
-        $rawConfig = file_get_contents(__DIR__ . '/../testingDbCredentials.json');
-        if ($rawConfig === false) {
-            throw new \Exception('Could not read config');
+        if ($config === null) {
+            $rawConfig = file_get_contents(__DIR__ . '/../testingDbCredentials.json');
+            if ($rawConfig === false) {
+                throw new \Exception('Could not read config');
+            }
+            $config = json_decode($rawConfig, true);
         }
-        $config = json_decode($rawConfig, true);
+
         if (! is_array($config)) {
             throw new \Exception('Invalid config');
         }

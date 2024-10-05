@@ -6,6 +6,7 @@
   },
   "require": {
     "dibi/dibi": "^5.0",
-    "phpunit/phpunit": "^11.2"
+    "phpunit/phpunit": "^11.2",
+    "nette/di": "^3.2"
   }
 }

@@ -12,24 +12,16 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractDbAwareTestCase extends TestCase
 {
+    use DIContainterTestTrait;
+
     protected Connection $connection;
 
     protected DataEntityManager $data;
 
     public function __construct(string $name)
     {
-        $container = $this->createContainer();
-        $this->connection = $container->getByType(Connection::class);
-        $this->data = $container->getByType(DataEntityManager::class);
+        $this->connection = $this->getContainer()->getByType(Connection::class);
+        $this->data = $this->getContainer()->getByType(DataEntityManager::class);
         parent::__construct($name);
-    }
-
-    protected function createContainer(): Container
-    {
-        $configurator = new Configurator();
-        $configurator->setTempDirectory(__DIR__ . '/../../../../temp');
-        $configurator->addConfig(__DIR__ . '/../../../../config/config.neon');
-        $configurator->addConfig(__DIR__ . '/../../../../config/tests.neon');
-        return $configurator->createContainer();
     }
 }

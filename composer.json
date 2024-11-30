@@ -8,6 +8,7 @@
     "dibi/dibi": "^5.0",
     "phpunit/phpunit": "^11.2",
     "nette/di": "^3.2",
-    "doomy/ormtopus": "^5.0.0"
+    "doomy/ormtopus": "^5.0.0",
+    "psr/http-message": "^2.0"
   }
 }

@@ -2,6 +2,7 @@
 
 namespace Doomy\Testing\Assert;
 
+use Doomy\Testing\Exception\KeyNotFoundException;
 use PHPUnit\Framework\Assert;
 use PHPUnit\Framework\Constraint\Constraint;
 
@@ -12,24 +13,25 @@ final class JsonResponseAssert
      */
     final static public function assertJsonOkResponseWithData(array $data, string $responseBody): void
     {
-        $expected = json_encode([
-            'status' => 'ok',
-            'data' => $data,
-        ]);
-
         $decoded = json_decode($responseBody, true);
-        foreach ($data as $key => $value) {
-            self::assertValueInJson($key, $value, $decoded['data'] ?? null);
+
+        try {
+            foreach ($data as $key => $value) {
+                self::assertValueInJson($key, $value, $decoded['data'] ?? null);
+            }
+        } catch (KeyNotFoundException $e) {
+            $keyMessage = $e->getMessage();
+
+            $message = $keyMessage . "\n\n" . "structures: \nexpected: \n" . json_encode($data, JSON_PRETTY_PRINT) . "\n\nactual:\n" . json_encode($decoded, JSON_PRETTY_PRINT);
+            Assert::fail($message);
         }
-
-
     }
 
     static private function assertValueInJson(string $name, mixed $value, ?array $data): void
     {
         Assert::assertNotNull($data);
         if (!array_key_exists($name, $data)) {
-            Assert::fail("Key '{$name}' not found in data");
+            throw new KeyNotFoundException("Key '{$name}' not found in data.");
         }
         if (is_array($value)) {
             foreach ($value as $key => $subValue) {
